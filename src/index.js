@@ -38,6 +38,12 @@ function checksTodoExists(request, response, next) {
   const { id } = request.params;
 
   const user = users.find(user => user.username === username);
+  
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[8|9|aA|bB][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+  if(!uuidRegex.test(id)) {
+    return response.status(400);
+  }
 
   if(!user) {
     return response.status(404).json({error: "User not found"});
@@ -48,6 +54,8 @@ function checksTodoExists(request, response, next) {
   if(!todo){ 
     return response.status(404).json({error: "Todo not found"});
   }
+
+  
 
   request.user = user;
   request.todo = todo;
